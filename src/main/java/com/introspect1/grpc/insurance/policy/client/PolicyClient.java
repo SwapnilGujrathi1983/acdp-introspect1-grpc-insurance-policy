@@ -4,6 +4,7 @@
 package com.introspect1.grpc.insurance.policy.client;
 
 import com.proto.policy.Policy;
+import com.proto.policy.PolicyId;
 import com.proto.policy.PolicyServiceGrpc;
 import com.proto.policy.PolicyServiceGrpc.PolicyServiceBlockingStub;
 
@@ -30,6 +31,8 @@ public class PolicyClient {
 
 		policyClient.doUpdateCall(channel);
 
+		policyClient.doDeleteCall(channel);
+		
 		channel.shutdown();
 	}
 
@@ -53,4 +56,21 @@ public class PolicyClient {
 		System.out.println("Update Policy Response : " + updatePolicyResp);
 	}
 
+	
+	private void doDeleteCall(ManagedChannel channel) {
+		// created a claim service client (blocking - synchronous)
+		PolicyServiceBlockingStub stub = PolicyServiceGrpc.newBlockingStub(channel);
+		
+		// Create PolicyId Request with Id to be deleted
+		PolicyId policyIdToBeDeleted = PolicyId.newBuilder()
+			.setId(2)
+			.build();
+
+		System.out.println("Sending DeletePolicy request for Id : " + policyIdToBeDeleted.getId());
+		// Call delete policy
+		Policy updatePolicyResp = stub.deletePolicy(policyIdToBeDeleted);
+
+		System.out.println("Delete Policy Response : " + updatePolicyResp);
+	}
+	
 }
