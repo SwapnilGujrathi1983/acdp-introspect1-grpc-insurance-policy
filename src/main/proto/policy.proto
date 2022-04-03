@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package introspect.swapnil.insurance;
+
+option java_package = "com.proto.policy";
+option java_multiple_files = true;
+
+message Policy {
+    int32 id = 1;
+	string type = 2;
+    string status = 3;
+	string custName = 4;
+    int32 custId = 5;
+}
+
+message PolicyId{
+    int32 id = 1;
+}
+
+service PolicyService {
+    /*
+     * Unary call.
+     * Updates a Policy based on incoming request
+     * and returns the updated Policy.
+     */
+    rpc UpdatePolicy(Policy) returns (Policy) {};
+
+    /*
+     * Unary call.
+     * Deletes a Policy based on incoming PolicyId.
+     */
+    rpc DeletePolicy(PolicyId) returns (Policy) {};
+
+    /*
+     * Bi-Directional call.
+     * Returns Policies based on the incoming PolicyIds.
+     */
+    rpc GetPolicies(stream PolicyId) returns (stream Policy) {};
+
+}
